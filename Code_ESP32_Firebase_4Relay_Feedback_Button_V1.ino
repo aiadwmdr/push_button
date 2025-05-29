@@ -28,26 +28,30 @@
 using namespace ace_button;
 
 // Wi-Fi credentials
-const char* ssid = "";  //WiFi Name
-const char* password = "";  //WiFi Password
+const char* ssid = "ryshsha";  //WiFi Name
+const char* password = "19931998030320021006";  //WiFi Password
 
 // Firebase credentials
 #define API_KEY ""
 #define DATABASE_URL ""
-#define USER_EMAIL ""
-#define USER_PASSWORD ""
+#define USER_EMAIL "aiadwmdr@gmail.com"
+#define USER_PASSWORD "HIT&run123"
 
 // Relay GPIOs (active LOW)
 #define RELAY1 23
 #define RELAY2 19
 #define RELAY3 18
 #define RELAY4 5
+#define RELAY5 18
+#define RELAY6 5
 
 // Button GPIOs
 #define SwitchPin1 13
 #define SwitchPin2 12
 #define SwitchPin3 14
 #define SwitchPin4 27
+#define SwitchPin5 14
+#define SwitchPin6 27
 
 // Firebase setup
 FirebaseData fbdo;
@@ -59,6 +63,8 @@ AceButton button1(SwitchPin1);
 AceButton button2(SwitchPin2);
 AceButton button3(SwitchPin3);
 AceButton button4(SwitchPin4);
+AceButton button5(SwitchPin5);
+AceButton button6(SwitchPin6);
 
 // Callback for button events
 void handleEvent(AceButton* button, uint8_t eventType, uint8_t /* buttonState */) {
@@ -91,6 +97,19 @@ void handleEvent(AceButton* button, uint8_t eventType, uint8_t /* buttonState */
       digitalWrite(RELAY4, currentState ? HIGH : LOW);
       Firebase.RTDB.setBool(&fbdo, "/relay4", !currentState);
       break;
+
+
+    case SwitchPin5:
+      currentState = digitalRead(RELAY5) == LOW;
+      digitalWrite(RELAY5, currentState ? HIGH : LOW);
+      Firebase.RTDB.setBool(&fbdo, "/relay5", !currentState);
+      break;
+
+    case SwitchPin6:
+      currentState = digitalRead(RELAY6) == LOW;
+      digitalWrite(RELAY6, currentState ? HIGH : LOW);
+      Firebase.RTDB.setBool(&fbdo, "/relay6", !currentState);
+      break;
   }
 }
 
@@ -103,29 +122,39 @@ void setup() {
   pinMode(RELAY2, OUTPUT);
   pinMode(RELAY3, OUTPUT);
   pinMode(RELAY4, OUTPUT);
+  pinMode(RELAY5, OUTPUT);
+  pinMode(RELAY6, OUTPUT);
 
   // Set relays OFF (HIGH for active-low)
   digitalWrite(RELAY1, HIGH);
   digitalWrite(RELAY2, HIGH);
   digitalWrite(RELAY3, HIGH);
   digitalWrite(RELAY4, HIGH);
+  digitalWrite(RELAY5, HIGH);
+  digitalWrite(RELAY6, HIGH);
 
   // Setup button pins
   pinMode(SwitchPin1, INPUT_PULLUP);
   pinMode(SwitchPin2, INPUT_PULLUP);
   pinMode(SwitchPin3, INPUT_PULLUP);
   pinMode(SwitchPin4, INPUT_PULLUP);
+  pinMode(SwitchPin5, INPUT_PULLUP);
+  pinMode(SwitchPin6, INPUT_PULLUP);
 
   // Attach AceButtons and set event handler
   ButtonConfig* config1 = button1.getButtonConfig();
   ButtonConfig* config2 = button2.getButtonConfig();
   ButtonConfig* config3 = button3.getButtonConfig();
   ButtonConfig* config4 = button4.getButtonConfig();
+  ButtonConfig* config5 = button5.getButtonConfig();
+  ButtonConfig* config6 = button6.getButtonConfig();
 
   config1->setEventHandler(handleEvent);
   config2->setEventHandler(handleEvent);
   config3->setEventHandler(handleEvent);
   config4->setEventHandler(handleEvent);
+  config5->setEventHandler(handleEvent);
+  config6->setEventHandler(handleEvent);
 
   WiFi.begin(ssid, password);
   Serial.print("Connecting to Wi-Fi");
@@ -147,7 +176,7 @@ void setup() {
 void loop() {
   // Check Firebase for updates
   if (Firebase.ready()) {
-    bool r1, r2, r3, r4;
+    bool r1, r2, r3, r4, r5, r6;
 
     if (Firebase.RTDB.getBool(&fbdo, "/relay1")) {
       r1 = fbdo.boolData();
@@ -168,13 +197,25 @@ void loop() {
       r4 = fbdo.boolData();
       digitalWrite(RELAY4, r4 ? LOW : HIGH);
     }
-  }
+
+      if (Firebase.RTDB.getBool(&fbdo, "/relay5")) {
+      r5 = fbdo.boolData();
+      digitalWrite(RELAY3, r5 ? LOW : HIGH);
+    }
+
+    if (Firebase.RTDB.getBool(&fbdo, "/relay6")) {
+      r6 = fbdo.boolData();
+      digitalWrite(RELAY4, r6 ? LOW : HIGH);
+    }
+}
 
   // Update AceButton logic
   button1.check();
   button2.check();
   button3.check();
   button4.check();
+  button5.check();
+  button6.check();
 
   delay(10);  // Short delay for stable button checking
 }
