@@ -183,6 +183,19 @@
       </div>
     </div>
 
+      <div class="relay-card">
+        <h2>Relay 5</h2>
+        <p>Status: <span id="status5">Loading...</span></p>
+        <button id="btn5">Toggle</button>
+      </div>
+
+      <div class="relay-card">
+        <h2>Relay 6</h2>
+        <p>Status: <span id="status6">Loading...</span></p>
+        <button id="btn6">Toggle</button>
+      </div>
+    </div>
+
     <button id="allOffBtn">All OFF</button>
     <button id="logoutBtn">Logout</button>
   </div>
@@ -198,21 +211,22 @@
 
   <script>
     // Firebase config
-    const firebaseConfig = {
-	  apiKey: "AIzaSyBFzQJ8a1AuHJABCDvg6UJMxjmD_XPPPOg",
-	  authDomain: "esp32-relay-control-01.firebaseapp.com",
-	  databaseURL: "https://esp32-relay1-control-02-default-rtdb.europe-west1.firebasedatabase.app",
-	  projectId: "esp32-relay-control-01",
-	  storageBucket: "esp32-relay-control-02.firebasestorage.app",
-	  messagingSenderId: "1057958003190",
-	  appId: "1:1057958003190:web:d4200d0e99b5ed880507d7"
-	};
+const firebaseConfig = {
+  apiKey: "AIzaSyDLjKmBM39j4qK-eVc3mKg-VugRE9_FU-c",
+  authDomain: "toggle-button-be13c.firebaseapp.com",
+  databaseURL: "https://toggle-button-be13c-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "toggle-button-be13c",
+  storageBucket: "toggle-button-be13c.firebasestorage.app",
+  messagingSenderId: "154085459222",
+  appId: "1:154085459222:web:e52fdfd5e8cc438d01bc37",
+  measurementId: "G-GG0PE6V7LE"
+};
 
     firebase.initializeApp(firebaseConfig);
 
     // Predefined login credentials (can be replaced with your logic)
-    const allowedEmail = "abc@gmail.com";
-    const allowedPassword = "90009550";
+    const allowedEmail = "aiadwmdr@gmail.com";
+    const allowedPassword = "HIT&run123";
 
     const loginForm = document.getElementById("loginForm");
     const dashboard = document.getElementById("dashboard");
@@ -253,6 +267,8 @@
         { id: 2, path: "relay2" },
         { id: 3, path: "relay3" },
         { id: 4, path: "relay4" },
+        { id: 5, path: "relay5" },
+        { id: 6, path: "relay6" },
       ];
 
       relays.forEach(relay => {
